@@ -7,7 +7,7 @@
 
         <!-- calls to bootstrap -->
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-        <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script> 
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.js" ></script> 
     
         <script src="https://unpkg.com/vue/dist/vue.min.js"></script>
 
@@ -19,16 +19,15 @@
     
     <div id="contents-main">
         <div class="lead">
-           <!-- <strong>Name of Event:</strong>
-            <span th:text="${products}"></span> -->
+           
         </div>
         <div id="contents">
            
             <ul>
-                <li style="list-style-type:none" v-for="products in productss">
-                    <products-card
-                            v-bind:products="products" v-bind:key="products.id">
-                    </products-card>
+                <li style="list-style-type:none" v-for="product in products">
+                    <product-card
+                            v-bind:product="product" v-bind:key="product.id">
+                    </product-card>
                 </li>
             </ul>
         </div>
@@ -36,42 +35,61 @@
 </div>
 
 <!-- include Vue.js -->
-<!-- we include babel js so that we can write ES6 code in the browser
-     for a more production like setup it is recommended to setup a build process
-     to transpile and minify the code (such as using webpack)
- -->
 <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.21.1/babel.min.js"></script>
-<script type="text/babel">
-    // products-card is now a Vue component that generates a 'card' showing a products
-    // It can be used
-    // declaratively like <products-card v-bind:products="someproducts">
-    Vue.component('products-card', {
-        props: ['products'],
-        template: `<div class="card">
-                    <div class="card-body">
-                        <h6 class="card-title">
-                            {{ products.name }}
-                        </h6>
-                        <p class="card-text">
+
+
+    
+
+    <script type="text/babel">
+
+    // this text was added to clean up JSON code to be used for JSON,parse
+    var json = "[[${products}]]";
+    var jsonFilter = json.replace(/{    &quot;id&quot;/g, ' { "id"').replace(/&quot;/g, '"').replace(/]/g, '').replace(/\[/g, '').replace(/}   {/g,'} ,  {' ) ;
+    var jsonArray = ' ['+ jsonFilter +']';
+    
+    var obj = JSON.parse(jsonArray);
+
+    alert (obj);
+    
+        // vue component
+        Vue.component('product-card', {
+            props: ['product'],
+            template: `
+            
+          
+            <div class="card">
+                        <div class="card-body">
+                            <h6 class="card-title">
+                                {{ product.name}}
+                            </h6>
+                            <p class="card-text">
                             <div>
-                            {{ products.description }}
+                            {{ product.name }}
                             </div>
                         </p>
-                    </div>
-                </div>`
-    });
+                        </div>
+                    </div>`
+        });
 
 
-    var app = new Vue({
+        //var dataURL = '/mobile.json';
 
-        el: '#contents',
-        data: 
-            [[${{{(products)}}}]]
+        var app = new Vue({
+            el: '#contents',
+            data: {
+                products: []
+                
+            }
+})
+            
+        
+        app.products = obj
+    
 
-    });
 
-</script>
+    </script>
+
 
     </body>
 </html>

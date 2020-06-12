@@ -10,6 +10,7 @@ import java.net.URL;
 import java.net.HttpURLConnection;
 import com.fasterxml.jackson.databind.ObjectMapper;
 //import com.utilitylocker.interview.jsonConnect;
+import org.apache.commons.text.StringEscapeUtils;
 
 
 
@@ -53,14 +54,15 @@ public class MainController {
 					json+=sc.nextLine();
 				}
 				sc.close();
+
 				//System.out.println("\nJSON Response in String format"); 
 				//System.out.println(json);
 				//Close the stream when reading the data has been finished
-				ObjectMapper mapper = new ObjectMapper();
+				//ObjectMapper mapper = new ObjectMapper();
 				
-  					//objectMapper.readValue(new URL(url));
-				model.addAttribute("products", mapper.writeValueAsString(json));
-				//model.addAttribute("products", json);
+				  //objectMapper.readValue(new URL(url));
+				//model.addAttribute("products", StringEscapeUtils.unescapeHtml4(mapper.writeValueAsString(json)));
+				model.addAttribute("products", json);
 				//model.addAttribute("products", mapper.readValue(new URL(url));
 
 				
