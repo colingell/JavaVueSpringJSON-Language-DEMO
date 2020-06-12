@@ -11,20 +11,24 @@
     
         <script src="https://unpkg.com/vue/dist/vue.min.js"></script>
 
-        
-
         <title>Utility Locker Interview</title>
 
     </head>
     
     <div id="contents-main">
-        <div class="lead">
-           
-        </div>
+        
+       
+
         <div id="contents">
            
+            <div class="row ">
+                <div class="search-wrapper col-12 pt-2 pb-2 bg-secondary">
+                    <input type="text" class="float-right" v-model="search" placeholder="Search products..."/>
+                </div>
+            </div>
+
             <ul>
-                <li style="list-style-type:none" v-for="product in products">
+                <li style="list-style-type:none" v-for="product in filteredList">
                     <product-card
                             v-bind:product="product" v-bind:key="product.id">
                     </product-card>
@@ -50,7 +54,8 @@
     
     var obj = JSON.parse(jsonArray);
 
-    alert (obj);
+    // added for testing JSON in correct format
+    //alert (obj);
     
         // vue component
         Vue.component('product-card', {
@@ -58,8 +63,8 @@
             template: `
             
           
-            <div class="card">
-                        <div class="card-body">
+            <div class="card mt-2">
+                        <div class="card-body ">
                             <h6 class="card-title">
                                 {{ product.name}}
                             </h6>
@@ -82,11 +87,28 @@
 
         var app = new Vue({
             el: '#contents',
+            
             data: {
+                search: '',
                 products: []
                 
-            }
+            },
+  methods: {
+    matches(obj) {
+      const term = this.searchQuery.toLowerCase();
+
+      return obj.name.toLowerCase().includes(term) || obj.description.toLowerCase().includes(term);
+    }
+  },
+  computed: {
+    filteredList() {
+      return this.products.filter(product => {
+        return product.description.toLowerCase().includes(this.search.toLowerCase())
+      })
+    }
+  }
 })
+
             
         
         app.products = obj
